@@ -5,6 +5,7 @@ import mk.ukim.finki.wp_aud.model.Category;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Repository
@@ -24,10 +25,10 @@ public class InMemoryCategoryRepository {
         return category;
     }
 
-    public List<Category> findAllByName(String name){
+    public Optional<Category> findAllByName(String name){
         return DataHolder.categories.stream()
                 .filter(c -> c.getName().equals(name))
-                .collect(Collectors.toList());
+                .findFirst();
     }
 
     public List<Category> search(String text){
