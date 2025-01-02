@@ -15,14 +15,14 @@ public class InMemoryCategoryRepository {
         return DataHolder.categories;
     }
 
-    public Category save(Category category){
+    public Optional<Category> save(Category category){
 
         //ako postoi kategorijata, izbrisi ja i dodavi nova
         DataHolder.categories.removeIf(c -> c.getName().equals(category.getName()));
 
         DataHolder.categories.add(category);
 
-        return category;
+        return Optional.of(category);
     }
 
     public Optional<Category> findAllByName(String name){
@@ -38,8 +38,15 @@ public class InMemoryCategoryRepository {
                 .toList();
     }
 
-    public void delete(String name){
-        DataHolder.categories.removeIf(c -> c.getName().equals(name));
+    public void deleteById(Long id){
+        DataHolder.categories.removeIf(c -> c.getId().equals(id));
+    }
+
+    public Optional<Category> findById(Long id){
+        return DataHolder.categories
+                .stream()
+                .filter(c -> c.getId().equals(id))
+                .findFirst();
     }
 
 }
