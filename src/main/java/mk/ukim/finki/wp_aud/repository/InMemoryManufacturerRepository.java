@@ -21,4 +21,16 @@ public class InMemoryManufacturerRepository {
                 .findFirst();
     }
 
+    public Optional<Manufacturer> save(String name, String address){
+        Manufacturer manufacturer = new Manufacturer(name, address);
+
+        DataHolder.manufacturers.add(manufacturer);
+
+        return Optional.of(manufacturer);
+    }
+
+    public boolean deleteById(Long id){
+        return DataHolder.manufacturers.removeIf(m -> m.getId().equals(id));
+    }
+
 }
