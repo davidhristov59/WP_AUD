@@ -13,7 +13,7 @@ import org.thymeleaf.web.servlet.JakartaServletWebApplication;
 
 import java.io.IOException;
 
-@WebServlet(name = "logout-servlet", urlPatterns = "/logout")
+@WebServlet(name = "logout-servlet", urlPatterns = "/servlet/logout")
 public class LogoutServlet extends HttpServlet {
 
     private final AuthService authService;
