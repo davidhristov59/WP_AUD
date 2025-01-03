@@ -1,13 +1,25 @@
 package mk.ukim.finki.wp_aud.model;
 
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
+import java.util.List;
+
+@Entity
+@NoArgsConstructor
+@Table(name = "shop_users")
 public class User {
 
+    @Id
     private String username;
+
     private String password;
     private String name;
     private String surname;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER) //1 user ima poveke shopping carts
+    private List<ShoppingCart> shoppingCarts;
 
     public User(String username, String password, String name, String surname) {
         this.username = username;

@@ -1,17 +1,28 @@
 package mk.ukim.finki.wp_aud.model;
 
+import jakarta.persistence.*;
 import mk.ukim.finki.wp_aud.model.enumerations.ShoppingCartStatus;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+@Entity
 public class ShoppingCart {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private LocalDateTime dateCreated;
+
+    @ManyToOne //poveke shopping carts za 1 user
     private User user;
+
+    @ManyToMany
     private List<Product> products;
+
+    @Enumerated(EnumType.STRING)
     private ShoppingCartStatus shoppingCartStatus;
 
     public ShoppingCart() {

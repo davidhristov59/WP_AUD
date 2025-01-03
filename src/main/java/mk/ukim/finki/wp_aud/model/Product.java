@@ -1,12 +1,23 @@
 package mk.ukim.finki.wp_aud.model;
 
+import jakarta.persistence.*;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor
+@Entity
 public class Product {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
     private Double price;
     private Integer quantity;
+
+    @ManyToOne //poveke produkti vo 1 kategorija
     private Category category;
+
+    @ManyToOne //poveke produkti da imaat 1 manufacturer
     private Manufacturer manufacturer;
 
     public Product( String name, Double price, Integer quantity, Category category, Manufacturer manufacturer) {
