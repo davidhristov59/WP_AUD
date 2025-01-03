@@ -8,9 +8,9 @@ import mk.ukim.finki.wp_aud.model.exceptions.ProductAlreadyInShoppingCartExcepti
 import mk.ukim.finki.wp_aud.model.exceptions.ProductNotFoundException;
 import mk.ukim.finki.wp_aud.model.exceptions.ShoppingCartNotFoundException;
 import mk.ukim.finki.wp_aud.model.exceptions.UserNotFoundException;
-import mk.ukim.finki.wp_aud.repository.InMemoryProductRepository;
-import mk.ukim.finki.wp_aud.repository.InMemoryShoppingCartRepository;
-import mk.ukim.finki.wp_aud.repository.InMemoryUserRepository;
+import mk.ukim.finki.wp_aud.repository.jpa.ProductRepository;
+import mk.ukim.finki.wp_aud.repository.jpa.ShoppingCartRepository;
+import mk.ukim.finki.wp_aud.repository.jpa.UserRepository;
 import mk.ukim.finki.wp_aud.service.ShoppingCartService;
 import org.springframework.stereotype.Service;
 
@@ -20,11 +20,11 @@ import java.util.stream.Collectors;
 @Service
 public class ShoppingCartImpl implements ShoppingCartService {
 
-    private final InMemoryShoppingCartRepository shoppingCartRepository;
-    private final InMemoryUserRepository userRepository;
-    private final InMemoryProductRepository productRepository;
+    private final ShoppingCartRepository shoppingCartRepository;
+    private final UserRepository userRepository;
+    private final ProductRepository productRepository;
 
-    public ShoppingCartImpl(InMemoryShoppingCartRepository shoppingCartRepository, InMemoryUserRepository userRepository, InMemoryProductRepository productRepository) {
+    public ShoppingCartImpl(ShoppingCartRepository shoppingCartRepository, UserRepository userRepository, ProductRepository productRepository) {
         this.shoppingCartRepository = shoppingCartRepository;
         this.userRepository = userRepository;
         this.productRepository = productRepository;
@@ -41,7 +41,7 @@ public class ShoppingCartImpl implements ShoppingCartService {
     @Override
     public ShoppingCart getActiveShoppingCarts(String username) {
 
-        return shoppingCartRepository.findByUsernameAndStatus(username, ShoppingCartStatus.CREATED)
+        return shoppingCartRepository.findByUserUsernameAndShoppingCartStatus(username, ShoppingCartStatus.CREATED)
                 .orElseGet(() -> {
                     User user = this.userRepository.findByUsername(username)
                             .orElseThrow(() -> new UserNotFoundException(username));

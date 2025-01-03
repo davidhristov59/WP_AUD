@@ -1,8 +1,7 @@
-package mk.ukim.finki.wp_aud.repository;
+package mk.ukim.finki.wp_aud.repository.impl;
 
 import mk.ukim.finki.wp_aud.bootstrap.DataHolder;
 import mk.ukim.finki.wp_aud.model.ShoppingCart;
-import mk.ukim.finki.wp_aud.model.User;
 import mk.ukim.finki.wp_aud.model.enumerations.ShoppingCartStatus;
 import org.springframework.stereotype.Repository;
 

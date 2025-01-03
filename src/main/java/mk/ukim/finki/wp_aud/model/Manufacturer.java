@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.NoArgsConstructor;
 
 @Entity
-@NoArgsConstructor
 @Table(name = "manufacturers")
 public class Manufacturer {
 
@@ -16,6 +15,8 @@ public class Manufacturer {
 
     @Column(name = "manufacturers_address")
     private String address;
+
+    public Manufacturer(){}
 
     public Manufacturer(String name, String address) {
         this.name = name;

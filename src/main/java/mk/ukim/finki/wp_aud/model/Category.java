@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@NoArgsConstructor
 public class Category {
 
     @Id
@@ -15,6 +14,10 @@ public class Category {
 
     @Column(length = 4000)
     private String description;
+
+    public Category(){
+
+    }
 
     public Category(String name, String description) {
         this.name = name;
@@ -31,5 +34,17 @@ public class Category {
 
     public String getDescription() {
         return description;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

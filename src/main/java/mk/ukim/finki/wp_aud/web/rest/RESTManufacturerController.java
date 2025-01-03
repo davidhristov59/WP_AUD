@@ -44,10 +44,10 @@ public class RESTManufacturerController {
     @DeleteMapping("/delete/{id}")
     public ResponseEntity deleteById(@PathVariable Long id){
 
-        if(manufacturerService.deleteById(id)){
+        if(manufacturerService.existsById(id)){ //ako postoi id-to, izbrisi go
+            this.manufacturerService.deleteById(id);
             return ResponseEntity.ok().build();
         }
-
         return ResponseEntity.badRequest().build();
     }
 

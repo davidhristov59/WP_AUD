@@ -1,7 +1,8 @@
 package mk.ukim.finki.wp_aud.service.ServiceImpl;
 
 import mk.ukim.finki.wp_aud.model.Category;
-import mk.ukim.finki.wp_aud.repository.InMemoryCategoryRepository;
+import mk.ukim.finki.wp_aud.repository.impl.InMemoryCategoryRepository;
+import mk.ukim.finki.wp_aud.repository.jpa.CategoryRepository;
 import mk.ukim.finki.wp_aud.service.CategoryService;
 import org.springframework.stereotype.Service;
 
@@ -11,9 +12,9 @@ import java.util.Optional;
 @Service
 public class CategoryServiceImpl implements CategoryService {
 
-    private final InMemoryCategoryRepository categoryRepository;
+    private final CategoryRepository categoryRepository;
 
-    public CategoryServiceImpl(InMemoryCategoryRepository categoryRepository) {
+    public CategoryServiceImpl(CategoryRepository categoryRepository) {
         this.categoryRepository = categoryRepository;
     }
 
@@ -24,7 +25,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public List<Category> listCategories() {
-        return categoryRepository.listAll();
+        return categoryRepository.findAll();
     }
 
     @Override
@@ -35,7 +36,7 @@ public class CategoryServiceImpl implements CategoryService {
 
         Category category = new Category(name, description);
 
-        return categoryRepository.save(category);
+        return Optional.of(categoryRepository.save(category)); //BITNO!!!
     }
 
     @Override
@@ -46,7 +47,10 @@ public class CategoryServiceImpl implements CategoryService {
 
         Category category = new Category(name, description);
 
-        return categoryRepository.save(category);
+        category.setName(name);
+        category.setDescription(description);
+
+        return Optional.of(categoryRepository.save(category));
     }
 
     @Override
@@ -55,7 +59,12 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    public void deleteByName(String name) {
+        categoryRepository.deleteByName(name);
+    }
+
+    @Override
     public List<Category> searchCategories(String text) {
-        return categoryRepository.search(text);
+        return categoryRepository.findAllByNameLike(text);
     }
 }

@@ -1,6 +1,5 @@
 package mk.ukim.finki.wp_aud.web.controllers;
 
-import mk.ukim.finki.wp_aud.repository.InMemoryCategoryRepository;
 import mk.ukim.finki.wp_aud.service.CategoryService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

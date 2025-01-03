@@ -3,13 +3,13 @@ package mk.ukim.finki.wp_aud.model;
 import jakarta.persistence.*;
 import lombok.NoArgsConstructor;
 import mk.ukim.finki.wp_aud.model.enumerations.ShoppingCartStatus;
+import mk.ukim.finki.wp_aud.service.ShoppingCartService;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@NoArgsConstructor
 public class ShoppingCart {
 
     @Id
@@ -26,6 +26,8 @@ public class ShoppingCart {
 
     @Enumerated(EnumType.STRING)
     private ShoppingCartStatus shoppingCartStatus;
+
+    public ShoppingCart(){}
 
     public ShoppingCart(User user) {
         this.dateCreated = LocalDateTime.now();

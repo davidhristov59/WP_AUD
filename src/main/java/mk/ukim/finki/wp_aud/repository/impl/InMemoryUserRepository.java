@@ -1,10 +1,9 @@
-package mk.ukim.finki.wp_aud.repository;
+package mk.ukim.finki.wp_aud.repository.impl;
 
 import mk.ukim.finki.wp_aud.bootstrap.DataHolder;
 import mk.ukim.finki.wp_aud.model.User;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
 import java.util.Optional;
 
 @Repository

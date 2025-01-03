@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 
 @Entity
-@NoArgsConstructor
 @Table(name = "shop_users")
 public class User {
 
@@ -20,6 +19,8 @@ public class User {
 
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER) //1 user ima poveke shopping carts
     private List<ShoppingCart> shoppingCarts;
+
+    public User(){}
 
     public User(String username, String password, String name, String surname) {
         this.username = username;

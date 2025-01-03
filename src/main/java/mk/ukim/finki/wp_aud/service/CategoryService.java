@@ -13,5 +13,6 @@ public interface CategoryService {
    Optional<Category> create(String name, String description);
    Optional<Category> update(String name, String description);
    void deleteById(Long id);
+   void deleteByName(String name);
    List<Category> searchCategories(String text);
 }

@@ -1,4 +1,4 @@
-package mk.ukim.finki.wp_aud.repository;
+package mk.ukim.finki.wp_aud.repository.impl;
 
 import mk.ukim.finki.wp_aud.bootstrap.DataHolder;
 import mk.ukim.finki.wp_aud.model.Category;

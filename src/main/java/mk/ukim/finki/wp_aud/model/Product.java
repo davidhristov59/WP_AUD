@@ -3,7 +3,6 @@ package mk.ukim.finki.wp_aud.model;
 import jakarta.persistence.*;
 import lombok.NoArgsConstructor;
 
-@NoArgsConstructor
 @Entity
 public class Product {
 
@@ -19,6 +18,8 @@ public class Product {
 
     @ManyToOne //poveke produkti da imaat 1 manufacturer
     private Manufacturer manufacturer;
+
+    public Product(){}
 
     public Product( String name, Double price, Integer quantity, Category category, Manufacturer manufacturer) {
         this.name = name;
@@ -50,5 +51,29 @@ public class Product {
 
     public Manufacturer getManufacturer() {
         return manufacturer;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
+    }
+
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
+    public void setManufacturer(Manufacturer manufacturer) {
+        this.manufacturer = manufacturer;
     }
 }
