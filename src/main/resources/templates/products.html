@@ -6,9 +6,49 @@
         </div>
     </section>
 
+    <div class="container mt-4">
+        <form th:action="@{/products}" th:method="GET">
+            <div class="row g-3 align-items-end">
+                <div class="col-md-6 form-group">
+                    <label for="searchName" class="form-label">Search by Name</label>
+                    <input type="text" th:value="${name}" class="form-control" id="searchName"
+                           placeholder="Enter product name" name="name">
+                </div>
+
+                <div class="col-md-3 form-group">
+                    <label for="categorySelect" class="form-label">Category</label>
+                    <select name="categoryId" id="categorySelect" class="form-control">
+                        <option value="">All categories</option>
+                        <option th:each="cat : ${categories}"
+                                th:value="${cat.getId()}"
+                                th:text="${cat.getName()}"
+                                th:selected="${categoryId != null && categoryId == cat.getId()}">
+                        </option>
+                    </select>
+                </div>
+
+                <div class="col-md-3 form-group">
+                    <label for="manufacturerSelect" class="form-label">Manufacturer</label>
+                    <select name="manufacturerId" id="manufacturerSelect" class="form-control">
+                        <option value="">All manufacturers</option>
+                        <option th:each="man : ${manufacturers}"
+                                th:value="${man.getId()}"
+                                th:text="${man.getName()}"
+                                th:selected="${manufacturerId != null && manufacturerId == man.getId()}">
+                        </option>
+                    </select>
+                </div>
+
+                <div class="col-12 mb-1">
+                    <button class="btn btn-primary w-100" type="submit">Search</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
     <div class="container mb-4">
         <div class="row">
-            <div class="col-12" th:if="${products.size() > 0}">
+            <div class="col-12" th:if="${page.totalElements > 0}">
                 <div class="table-responsive">
                     <table class="table table-striped">
                         <thead>
@@ -20,7 +60,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr th:each="product : ${products}" class="product">
+                        <tr th:each="product : ${page.getContent()}" class="product">
                             <td th:text="${product.getName()}"></td>
                             <td th:text="${product.getPrice()}"></td>
                             <td th:text="${product.getManufacturer() != null}
@@ -28,38 +68,32 @@
                             <td th:text="${product.getCategory() != null}
                             ? ${product.getCategory().getName()} : 'No Category'"></td>
                             <td class="text-right">
-
-                                <!--Dodadeno-->
-                                <th:block sec:authorize="hasRole('ROLE_ADMIN')"> <!--MOZE I method=DELETE-->
-                                    <form th:method="POST"  th:action="@{'/products/delete/{id}' (id = ${product.getId()})}">
-
+                                <th:block>
+                                    <form th:action="@{'/products/delete/{id}' (id=${product.getId()})}"
+                                          th:method="DELETE">
                                         <button type="submit"
                                                 class="btn btn-sm btn-danger delete-product">
-                                            <i class="fa fa-trash">Delete </i>
+                                            <i class="fa fa-trash">Delete</i>
                                         </button>
-
                                     </form>
                                 </th:block>
-
-                                <th:block sec:authorize="hasRole('ROLE_ADMIN')">
+                                <th:block>
                                     <a th:href="@{'/products/edit-form/{id}' (id=${product.getId()})}"
                                        class="btn btn-sm btn-info edit-product">
                                         <i class="fa fa-trash">Edit</i>
                                     </a>
                                 </th:block>
-
-                                <form th:method="POST" th:action="@{'/shopping-cart/add-product/{id}' (id = ${product.getId()})}">
-
-                                    <button type="submit" class="btn btn-primary"><i class="fa fa-shopping-cart">
-                                        Add product to cart</i></button>
+                                <form th:action="@{'/shopping-cart/add-product/{id}' (id=${product.getId()})}"
+                                      th:method="POST">
+                                    <button type="submit" class="btn btn-sm btn-primary">
+                                        <i class="fa fa-shopping-cart">Add product to cart</i></button>
                                 </form>
-
-                                <!--do tuka-->
 
                             </td>
                         </tr>
                         </tbody>
                     </table>
+                    <div th:include="fragments/paging :: pageSection(${page})"></div>
                 </div>
             </div>
             <div class="col mb-3">

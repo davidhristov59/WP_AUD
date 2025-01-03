@@ -1,12 +1,12 @@
 package mk.ukim.finki.wp_aud.web.controllers;
 
-import jakarta.servlet.http.HttpServletRequest;
 import mk.ukim.finki.wp_aud.model.Category;
 import mk.ukim.finki.wp_aud.model.Manufacturer;
 import mk.ukim.finki.wp_aud.model.Product;
 import mk.ukim.finki.wp_aud.service.CategoryService;
 import mk.ukim.finki.wp_aud.service.ManufacturerService;
 import mk.ukim.finki.wp_aud.service.ProductService;
+import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,22 +28,32 @@ public class ProductController {
         this.categoryService = categoryService;
     }
 
-    @GetMapping
-    public String getProductsPage(@RequestParam (required = false) String error, Model model, HttpServletRequest request){
-
+    @GetMapping()
+    public String getProductPage(
+            @RequestParam(required = false) String error,
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) Long categoryId,
+            @RequestParam(required = false) Long manufacturerId,
+            @RequestParam(defaultValue = "1") Integer pageNum,
+            @RequestParam(defaultValue = "10") Integer pageSize,
+            Model model
+    ) {
         if (error != null && !error.isEmpty()) {
             model.addAttribute("hasError", true);
             model.addAttribute("error", error);
         }
 
-        String username = request.getRemoteUser();
-
-        model.addAttribute("username", username);
+        Page<Product> page = this.productService.findPage(name, categoryId, manufacturerId, pageNum, pageSize);
+        model.addAttribute("page", page);
+        model.addAttribute("manufacturers", this.manufacturerService.findAll());
+        model.addAttribute("categories", this.categoryService.listCategories());
+        model.addAttribute("name", name);
+        model.addAttribute("categoryId", categoryId);
+        model.addAttribute("manufacturerId", manufacturerId);
         model.addAttribute("bodyContent", "products");
-        model.addAttribute("products", productService.findAll());
-
         return "master-template";
     }
+
 
     @PostMapping("/delete/{id}")
     @PreAuthorize("hasRole('ADMIN')")

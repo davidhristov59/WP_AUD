@@ -6,14 +6,19 @@ import mk.ukim.finki.wp_aud.model.Product;
 import mk.ukim.finki.wp_aud.model.exceptions.CategoryNotFoundException;
 import mk.ukim.finki.wp_aud.model.exceptions.ManufacturerNotFoundException;
 import mk.ukim.finki.wp_aud.model.exceptions.ProductNotFoundException;
-import mk.ukim.finki.wp_aud.repository.impl.InMemoryCategoryRepository;
-import mk.ukim.finki.wp_aud.repository.impl.InMemoryManufacturerRepository;
-import mk.ukim.finki.wp_aud.repository.impl.InMemoryProductRepository;
+
 import mk.ukim.finki.wp_aud.repository.jpa.CategoryRepository;
 import mk.ukim.finki.wp_aud.repository.jpa.ManufacturerRepository;
 import mk.ukim.finki.wp_aud.repository.jpa.ProductRepository;
 import mk.ukim.finki.wp_aud.service.ProductService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import static mk.ukim.finki.wp_aud.service.specifications.FieldFilterSpecification.filterContainsText;
+import static mk.ukim.finki.wp_aud.service.specifications.FieldFilterSpecification.filterEquals;
+
 
 import java.util.List;
 import java.util.Optional;
@@ -78,4 +83,18 @@ public class ProductServiceImpl implements ProductService {
     public void deleteById(Long id) {
         productRepository.deleteById(id);
     }
+
+    @Override
+    public Page<Product> findPage(String name, Long categoryId, Long manufacturerId, Integer pageNum, Integer pageSize) {
+        Specification<Product> specification = Specification
+                .where(filterContainsText(Product.class, "name", name))
+                .and(filterEquals(Product.class, "category.id", categoryId))
+                .and(filterEquals(Product.class, "manufacturer.id", manufacturerId));
+
+        return this.productRepository.findAll(
+                specification,
+                PageRequest.of(pageNum - 1, pageSize, Sort.by(Sort.Direction.DESC, "name"))
+        );
+    }
+
 }
