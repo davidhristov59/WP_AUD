@@ -1,6 +1,7 @@
 package mk.ukim.finki.wp_aud.model;
 
 import jakarta.persistence.*;
+import lombok.NoArgsConstructor;
 import mk.ukim.finki.wp_aud.model.enumerations.ShoppingCartStatus;
 
 import java.time.LocalDateTime;
@@ -8,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@NoArgsConstructor
 public class ShoppingCart {
 
     @Id
@@ -25,12 +27,7 @@ public class ShoppingCart {
     @Enumerated(EnumType.STRING)
     private ShoppingCartStatus shoppingCartStatus;
 
-    public ShoppingCart() {
-        this.id = (long) (Math.random() * 1000);
-    }
-
     public ShoppingCart(User user) {
-        this.id = (long) (Math.random() * 1000);
         this.dateCreated = LocalDateTime.now();
         this.user = user;
         this.shoppingCartStatus = ShoppingCartStatus.CREATED;
