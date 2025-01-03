@@ -33,7 +33,7 @@ public class ShoppingCartController {
         model.addAttribute("products", shoppingCartService.listAllProductsInShoppingCart(shoppingCart.getId()));
         model.addAttribute("bodyContent", "shopping-cart");
 
-        return "shopping-cart";
+        return "master-template";
     }
 
 

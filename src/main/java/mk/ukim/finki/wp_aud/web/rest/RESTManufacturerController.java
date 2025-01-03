@@ -28,8 +28,7 @@ public class RESTManufacturerController {
     public ResponseEntity<Manufacturer> findById(@PathVariable Long id){
         return this.manufacturerService
                 .findById(id)
-                .map(manufacturer ->
-                    ResponseEntity.ok().body(manufacturer))
+                .map(manufacturer -> ResponseEntity.ok().body(manufacturer))
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 

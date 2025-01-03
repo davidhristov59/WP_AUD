@@ -34,9 +34,10 @@ public class ProductController {
             model.addAttribute("error", error);
         }
 
+        model.addAttribute("bodyContent", "products");
         model.addAttribute("products", productService.findAll());
 
-        return "products";
+        return "master-template";
     }
 
     @PostMapping("/delete/{id}")
