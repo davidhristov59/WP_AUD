@@ -1,11 +1,13 @@
 package mk.ukim.finki.wp_aud.web.controllers;
 
+import jakarta.servlet.http.HttpServletRequest;
 import mk.ukim.finki.wp_aud.model.Category;
 import mk.ukim.finki.wp_aud.model.Manufacturer;
 import mk.ukim.finki.wp_aud.model.Product;
 import mk.ukim.finki.wp_aud.service.CategoryService;
 import mk.ukim.finki.wp_aud.service.ManufacturerService;
 import mk.ukim.finki.wp_aud.service.ProductService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -27,13 +29,16 @@ public class ProductController {
     }
 
     @GetMapping
-    public String getProductsPage(@RequestParam (required = false) String error, Model model){
+    public String getProductsPage(@RequestParam (required = false) String error, Model model, HttpServletRequest request){
 
         if (error != null && !error.isEmpty()) {
             model.addAttribute("hasError", true);
             model.addAttribute("error", error);
         }
 
+        String username = request.getRemoteUser();
+
+        model.addAttribute("username", username);
         model.addAttribute("bodyContent", "products");
         model.addAttribute("products", productService.findAll());
 
@@ -41,6 +46,7 @@ public class ProductController {
     }
 
     @PostMapping("/delete/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public String deleteProduct(@PathVariable Long id){
 
         productService.deleteById(id);
@@ -48,6 +54,7 @@ public class ProductController {
     }
 
     @GetMapping("/edit-form/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public String editProductPage(@PathVariable Long id, Model model){
 
         if(this.productService.findById(id).isPresent()){
@@ -67,6 +74,7 @@ public class ProductController {
     }
 
     @GetMapping("/add-form")
+    @PreAuthorize("hasRole('ADMIN')")
     public String addProductPage (Model model){
 
         List<Manufacturer> manufacturers = manufacturerService.findAll();
@@ -80,6 +88,7 @@ public class ProductController {
 
 
     @PostMapping("/add")
+    @PreAuthorize("hasRole('ADMIN')")
     public String saveProduct(@RequestParam(required = false) Long id,
                               @RequestParam String name,
                               @RequestParam Double price,

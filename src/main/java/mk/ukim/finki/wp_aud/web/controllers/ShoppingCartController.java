@@ -26,9 +26,8 @@ public class ShoppingCartController {
             model.addAttribute("error", error);
         }
 
-        User user = (User) request.getSession().getAttribute("user");
-
-        ShoppingCart shoppingCart = shoppingCartService.getActiveShoppingCarts(user.getUsername());
+        String username = request.getRemoteUser();
+        ShoppingCart shoppingCart = shoppingCartService.getActiveShoppingCarts(username);
 
         model.addAttribute("products", shoppingCartService.listAllProductsInShoppingCart(shoppingCart.getId()));
         model.addAttribute("bodyContent", "shopping-cart");
@@ -41,8 +40,8 @@ public class ShoppingCartController {
     public String addProductToShoppingCart(@PathVariable Long id, HttpServletRequest request){
 
         try {
-            User user = (User) request.getSession().getAttribute("user");
-            shoppingCartService.addProductToShoppingCart(user.getUsername(), id);
+            String username = request.getRemoteUser();
+            this.shoppingCartService.addProductToShoppingCart(username, id);
             return "redirect:/shopping-cart";
         } catch(RuntimeException e){
             return "redirect:/shopping-cart?error=" + e.getMessage();

@@ -30,7 +30,7 @@
                             <td class="text-right">
 
                                 <!--Dodadeno-->
-                                <th:block> <!--MOZE I method=DELETE-->
+                                <th:block sec:authorize="hasRole('ROLE_ADMIN')"> <!--MOZE I method=DELETE-->
                                     <form th:method="POST"  th:action="@{'/products/delete/{id}' (id = ${product.getId()})}">
 
                                         <button type="submit"
@@ -41,7 +41,7 @@
                                     </form>
                                 </th:block>
 
-                                <th:block>
+                                <th:block sec:authorize="hasRole('ROLE_ADMIN')">
                                     <a th:href="@{'/products/edit-form/{id}' (id=${product.getId()})}"
                                        class="btn btn-sm btn-info edit-product">
                                         <i class="fa fa-trash">Edit</i>
