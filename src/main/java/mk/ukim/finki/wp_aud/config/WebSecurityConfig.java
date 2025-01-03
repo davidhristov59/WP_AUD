@@ -2,11 +2,14 @@ package mk.ukim.finki.wp_aud.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -20,9 +23,11 @@ import org.springframework.security.web.SecurityFilterChain;
 public class WebSecurityConfig {
 
     private final PasswordEncoder passwordEncoder;
+    private final CustomUsernameAndPasswordAuthentication authProvider;
 
-    public WebSecurityConfig(PasswordEncoder passwordEncoder) {
+    public WebSecurityConfig(PasswordEncoder passwordEncoder, CustomUsernameAndPasswordAuthentication authProvider) {
         this.passwordEncoder = passwordEncoder;
+        this.authProvider = authProvider;
     }
 
     @Bean
@@ -30,6 +35,9 @@ public class WebSecurityConfig {
 
         http
                 .csrf(AbstractHttpConfigurer::disable)
+                .headers((headers) -> headers
+                        .frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin)
+                )
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers("/", "/home", "/assets/**", "/register")
                         .permitAll()
@@ -37,7 +45,7 @@ public class WebSecurityConfig {
                         .anyRequest()
                         .authenticated()
                 )
-                .httpBasic(Customizer.withDefaults())
+                //.httpBasic(Customizer.withDefaults())
                 .formLogin((form) -> form
                         .loginPage("/login")
                         .permitAll()
@@ -58,7 +66,8 @@ public class WebSecurityConfig {
         return http.build();
     }
 
-    @Bean
+    //In-Memory Authentication
+    //@Bean
     public UserDetailsService userDetailsService(){
 
         UserDetails user1 = User.builder()
@@ -80,6 +89,17 @@ public class WebSecurityConfig {
                 .build();
 
         return new InMemoryUserDetailsManager(user1, user2, user3);
+    }
+
+    @Bean
+    public AuthenticationManager authManager(HttpSecurity httpSecurity) throws Exception{
+
+        AuthenticationManagerBuilder managerBuilder =
+                httpSecurity.getSharedObject(AuthenticationManagerBuilder.class);
+
+        managerBuilder.authenticationProvider(authProvider);
+
+        return managerBuilder.build();
     }
 
 }

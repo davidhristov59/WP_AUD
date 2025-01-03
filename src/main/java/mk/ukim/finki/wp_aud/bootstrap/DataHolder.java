@@ -2,6 +2,10 @@ package mk.ukim.finki.wp_aud.bootstrap;
 
 import jakarta.annotation.PostConstruct;
 import mk.ukim.finki.wp_aud.model.*;
+import mk.ukim.finki.wp_aud.repository.jpa.CategoryRepository;
+import mk.ukim.finki.wp_aud.repository.jpa.ManufacturerRepository;
+import mk.ukim.finki.wp_aud.repository.jpa.UserRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -15,6 +19,19 @@ public class DataHolder {
     public static List<Manufacturer> manufacturers = null;
     public static List<Product> products = null;
     public static List<ShoppingCart> shoppingCarts = null;
+
+    private final CategoryRepository categoryRepository;
+    private final UserRepository userRepository;
+    private final ManufacturerRepository manufacturerRepository;
+
+    private final PasswordEncoder passwordEncoder;
+
+    public DataHolder(CategoryRepository categoryRepository, UserRepository userRepository, ManufacturerRepository manufacturerRepository, PasswordEncoder passwordEncoder) {
+        this.categoryRepository = categoryRepository;
+        this.userRepository = userRepository;
+        this.manufacturerRepository = manufacturerRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @PostConstruct
     public void init(){
